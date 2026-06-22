@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyVerse — Manga, Mashina, Ob-havo, Futbol, Yangiliklar</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0d0d0f;color:#e8e6e1;min-height:100vh}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:56px;border-bottom:1px solid #2a2a30;background:#0d0d0f;position:sticky;top:0;z-index:200}
+.nav-logo{font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{color:#c084fc}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{padding:6px 14px;border-radius:8px;font-size:13px;color:#888;cursor:pointer;border:none;background:none;transition:all .18s;white-space:nowrap}
+.nav-tab:hover{color:#e8e6e1;background:#1e1e24}
+.nav-tab.active{color:#e8e6e1;background:#1e1e24}
+.nav-tab .ti{margin-right:5px;font-size:15px;vertical-align:-2px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.search-in{background:#1a1a20;border:1px solid #2a2a30;border-radius:8px;padding:6px 12px;font-size:13px;color:#e8e6e1;width:150px;outline:none}
+.search-in:focus{border-color:#7c3aed}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+
+/* HERO SHARED */
+.hero{padding:2.5rem 1.5rem 2rem;position:relative;overflow:hidden}
+.hero-tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase}
+.hero h1{font-size:32px;font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:8px}
+.hero h1 em{font-style:normal}
+.hero p{font-size:13px;color:#888;line-height:1.6;margin-bottom:1.5rem;max-width:420px}
+.btn-p{background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-s{background:transparent;color:#e8e6e1;border:1px solid #3a3a44;border-radius:10px;padding:9px 20px;font-size:13px;cursor:pointer}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+
+/* SECTION */
+.sec{padding:1.5rem;border-top:1px solid #1e1e24}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.sec-title{font-size:15px;font-weight:700}
+.sec-more{font-size:12px;color:#7c3aed;cursor:pointer}
+
+/* CARDS SCROLL */
+.card-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.card-row::-webkit-scrollbar{display:none}
+
+/* GRID */
+.grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+
+/* PILL FILTERS */
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.pill{background:#161618;border:1px solid #2a2a30;border-radius:20px;padding:5px 14px;font-size:12px;color:#aaa;cursor:pointer;transition:all .18s;white-space:nowrap}
+.pill:hover,.pill.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
+
+/* ═══════ MANGA ═══════ */
+.manga-feat{flex:0 0 150px;background:#161618;border:1px solid #2a2a30;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s}
+.manga-feat:hover{transform:translateY(-3px);border-color:#7c3aed}
+.manga-cover-lg{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:44px;flex-direction:column;gap:6px}
+.mf-info{padding:8px}
+.mf-title{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.mf-badge{display:inline-block;background:#3b1f6a;color:#c084fc;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;margin-bottom:4px}
+.mf-rating{color:#f59e0b;font-size:10px}
+.mf-ch{font-size:10px;color:#666}
+.manga-sm{background:#161618;border:1px solid #2a2a30;border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .18s}
+.manga-sm:hover{transform:translateY(-2px);border-color:#7c3aed55}
+.ms-cover{width:100%;height:170px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.ms-body{padding:8px}
+.ms-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.ms-genre{font-size:10px;color:#666}
+.ms-ch{font-size:10px;color:#c084fc;margin-top:2px}
+
+/* ═══════ MASHINA ═══════ */
+.car-card{flex:0 0 240px;background:#161618;border:1px solid #2a2a30;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s}
+.car-card:hover{transform:translateY(-3px);border-color:#f59e0b}
+.car-img{width:100%;height:150px;display:flex;align-items:center;justify-content:center;font-size:56px;flex-direction:column;gap:6px}
+.car-info{padding:12px}
+.car-name{font-size:14px;font-weight:700;margin-bottom:4px}
+.car-price{font-size:13px;color:#f59e0b;font-weight:600;margin-bottom:6px}
+.car-tags{display:flex;gap:6px;flex-wrap:wrap}
+.car-tag{background:#1e1e24;border-radius:4px;padding:2px 8px;font-size:10px;color:#888}
+.car-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.car-grid-card{background:#161618;border:1px solid #2a2a30;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .18s}
+.car-grid-card:hover{transform:translateY(-2px);border-color:#f59e0b55}
+.car-g-img{width:100%;height:130px;display:flex;align-items:center;justify-content:center;font-size:44px}
+.car-g-info{padding:10px}
+.car-g-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.car-g-price{font-size:12px;color:#f59e0b;margin-bottom:5px}
+.car-specs{display:flex;gap:8px;font-size:10px;color:#666}
+
+/* ═══════ OB-HAVO ═══════ */
+.weather-hero{background:#161618;border-radius:16px;border:1px solid #2a2a30;padding:2rem;margin:0 1.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.wh-left{}
+.wh-city{font-size:13px;color:#888;margin-bottom:4px}
+.wh-temp{font-size:64px;font-weight:800;line-height:1;letter-spacing:-3px;margin-bottom:6px}
+.wh-desc{font-size:15px;color:#aaa}
+.wh-right{text-align:right}
+.wh-icon{font-size:80px;line-height:1}
+.wh-feel{font-size:12px;color:#666;margin-top:6px}
+.weather-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;padding:0 1.5rem 1.5rem}
+.w-card{background:#161618;border:1px solid #2a2a30;border-radius:12px;padding:14px;text-align:center}
+.w-card-icon{font-size:28px;margin-bottom:6px}
+.w-card-label{font-size:11px;color:#666;margin-bottom:4px}
+.w-card-val{font-size:16px;font-weight:700}
+.forecast-row{display:flex;gap:10px;overflow-x:auto;padding:0 1.5rem 1.5rem;scrollbar-width:none}
+.forecast-row::-webkit-scrollbar{display:none}
+.fc-day{flex:0 0 90px;background:#161618;border:1px solid #2a2a30;border-radius:12px;padding:12px;text-align:center}
+.fc-day.today{border-color:#7c3aed}
+.fc-name{font-size:11px;color:#888;margin-bottom:6px}
+.fc-icon{font-size:24px;margin-bottom:6px}
+.fc-hi{font-size:14px;font-weight:700}
+.fc-lo{font-size:11px;color:#666}
+.city-search{display:flex;gap:10px;padding:0 1.5rem 1.5rem}
+.city-in{flex:1;background:#161618;border:1px solid #2a2a30;border-radius:10px;padding:10px 14px;font-size:13px;color:#e8e6e1;outline:none}
+.city-in:focus{border-color:#7c3aed}
+.city-btn{background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;cursor:pointer;white-space:nowrap}
+
+/* ═══════ FUTBOL ═══════ */
+.match-card{background:#161618;border:1px solid #2a2a30;border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .18s}
+.match-card:hover{border-color:#22c55e55}
+.match-league{font-size:10px;color:#22c55e;font-weight:600;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase}
+.match-teams{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.match-team{flex:1;text-align:center}
+.match-team-name{font-size:13px;font-weight:600;margin-bottom:4px}
+.match-team-flag{font-size:28px}
+.match-score{text-align:center;min-width:80px}
+.score-num{font-size:24px;font-weight:800;letter-spacing:2px}
+.score-live{font-size:10px;color:#22c55e;font-weight:600;margin-top:2px}
+.score-time{font-size:10px;color:#666;margin-top:2px}
+.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.standings-table{width:100%;border-collapse:collapse;font-size:13px}
+.standings-table th{padding:8px 12px;text-align:left;font-size:11px;color:#666;font-weight:600;border-bottom:1px solid #2a2a30}
+.standings-table td{padding:8px 12px;border-bottom:1px solid #1e1e24}
+.standings-table tr:hover td{background:#1a1a20}
+.pos-badge{display:inline-block;width:20px;height:20px;border-radius:4px;text-align:center;line-height:20px;font-size:11px;font-weight:700}
+.pos-cl{background:#1e3a5f;color:#60a5fa}
+.pos-el{background:#1a3a1a;color:#4ade80}
+.pos-rel{background:#3a1a1a;color:#f87171}
+
+/* ═══════ NEWS ═══════ */
+.news-featured{background:#161618;border:1px solid #2a2a30;border-radius:14px;overflow:hidden;cursor:pointer;margin:0 1.5rem 1.5rem;transition:border-color .2s}
+.news-featured:hover{border-color:#c084fc}
+.news-feat-img{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:64px}
+.news-feat-body{padding:1.25rem}
+.news-cat{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.news-feat-title{font-size:17px;font-weight:700;line-height:1.3;margin-bottom:6px}
+.news-feat-sub{font-size:13px;color:#888;line-height:1.5;margin-bottom:8px}
+.news-meta{font-size:11px;color:#666}
+.news-card{background:#161618;border:1px solid #2a2a30;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .18s;display:flex;flex-direction:column}
+.news-card:hover{transform:translateY(-2px);border-color:#c084fc44}
+.news-card-img{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:40px}
+.news-card-body{padding:10px;flex:1}
+.news-card-cat{font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;display:inline-block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.news-card-title{font-size:12px;font-weight:600;line-height:1.4;margin-bottom:4px}
+.news-card-meta{font-size:10px;color:#666}
+
+/* READER */
+.reader-overlay{display:none;position:fixed;inset:0;background:#000;z-index:500;flex-direction:column}
+.reader-overlay.open{display:flex}
+.reader-nav{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:52px;background:#111;border-bottom:1px solid #2a2a30;flex-shrink:0}
+.reader-title-txt{font-size:14px;font-weight:600}
+.back-btn{background:none;border:none;color:#e8e6e1;font-size:22px;cursor:pointer;padding:0 8px 0 0}
+.reader-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:4px;padding:1rem 0}
+.r-page{width:min(480px,95vw);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#444;font-size:13px}
+.reader-foot{background:#111;border-top:1px solid #2a2a30;padding:12px 1.5rem;display:flex;align-items:center;justify-content:center;gap:16px;flex-shrink:0}
+.chap-btn{background:#1e1e28;border:1px solid #3a3a44;color:#e8e6e1;border-radius:8px;padding:7px 18px;font-size:13px;cursor:pointer}
+.chap-btn:hover{border-color:#7c3aed;color:#c084fc}
+
+@media(max-width:600px){
+  .hero h1{font-size:24px}
+  .nav-tab span.lbl{display:none}
+  .search-in{width:100px}
+  .wh-temp{font-size:48px}
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">My<span>Verse</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="goPage('manga',this)"><i class="ti ti-book"></i><span class="lbl">Manga</span></button>
+    <button class="nav-tab" onclick="goPage('car',this)"><i class="ti ti-car"></i><span class="lbl">Mashina</span></button>
+    <button class="nav-tab" onclick="goPage('weather',this)"><i class="ti ti-cloud"></i><span class="lbl">Ob-havo</span></button>
+    <button class="nav-tab" onclick="goPage('football',this)"><i class="ti ti-ball-football"></i><span class="lbl">Futbol</span></button>
+    <button class="nav-tab" onclick="goPage('news',this)"><i class="ti ti-news"></i><span class="lbl">Yangiliklar</span></button>
+  </div>
+  <div class="nav-right">
+    <input class="search-in" placeholder="🔍 Qidirish...">
+  </div>
+</nav>
+
+<!-- ══════════ MANGA PAGE ══════════ -->
+<div class="page active" id="page-manga">
+  <div class="hero" style="padding-bottom:1.5rem">
+    <div class="hero-tag" style="background:#3b1f6a;color:#c084fc">⚡ Bugun yangilandi</div>
+    <h1>Cheksiz manga<br>dunyosiga <em style="color:#c084fc">xush kelibsiz</em></h1>
+    <p>50,000+ manga, manhwa va manhua. O'zbek, rus va ingliz tillarida.</p>
+    <div class="hero-btns">
+      <button class="btn-p" onclick="openReader('Demon Slayer',1)">▶ Hozir o'qi</button>
+      <button class="btn-s">Kolleksiya</button>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">🔥 Mashhur</div><span class="sec-more">Hammasi →</span></div>
+    <div class="card-row" id="manga-featured"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">Janrlar</div></div>
+    <div class="pills" id="manga-genres"></div>
+    <div class="grid-3" id="manga-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════ CAR PAGE ══════════ -->
+<div class="page" id="page-car">
+  <div class="hero">
+    <div class="hero-tag" style="background:#422006;color:#f59e0b">🚗 2025 Modellar</div>
+    <h1>Orzuingizdagi <em style="color:#f59e0b">mashinani</em> toping</h1>
+    <p>1,200+ avtomobil — narx, texnik xususiyatlar va sharhlar bilan.</p>
+    <div class="hero-btns"><button class="btn-p" style="background:#d97706">Barcha mashinalar</button><button class="btn-s">Solishtirish</button></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">⭐ Eng mashhur</div><span class="sec-more">Ko'proq →</span></div>
+    <div class="card-row" id="car-featured"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">Kategoriyalar</div></div>
+    <div class="pills" id="car-cats"></div>
+    <div class="car-grid" id="car-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════ WEATHER PAGE ══════════ -->
+<div class="page" id="page-weather">
+  <div style="padding:1.5rem 1.5rem 1rem">
+    <div class="city-search">
+      <input class="city-in" id="city-input" placeholder="Shahar kiriting... (masalan: Toshkent)" onkeydown="if(event.key==='Enter')changeCity()">
+      <button class="city-btn" onclick="changeCity()"><i class="ti ti-search"></i> Qidirish</button>
+    </div>
+  </div>
+  <div class="weather-hero" id="w-main"></div>
+  <div class="weather-grid" id="w-details"></div>
+  <div class="sec"><div class="sec-hd"><div class="sec-title">7 kunlik prognoz</div></div></div>
+  <div class="forecast-row" id="w-forecast"></div>
+  <div class="sec"><div class="sec-hd"><div class="sec-title">🌍 Boshqa shaharlar</div></div>
+    <div class="grid-2" id="w-cities"></div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTBALL PAGE ══════════ -->
+<div class="page" id="page-football">
+  <div class="hero">
+    <div class="hero-tag" style="background:#052e16;color:#4ade80">⚽ Jonli natijalar</div>
+    <h1>Futbol <em style="color:#22c55e">yangiliklari</em></h1>
+    <p>Premier League, La Liga, Serie A va boshqa ligalar natijalari.</p>
+    <div class="hero-btns"><button class="btn-p" style="background:#16a34a">Jonli o'yinlar</button><button class="btn-s">Jadval</button></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">🟢 Jonli o'yinlar</div></div>
+    <div class="pills" id="league-pills"></div>
+    <div class="match-grid" id="matches-live"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">Bugungi o'yinlar</div></div>
+    <div class="match-grid" id="matches-today"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">📊 Premier League jadvali</div></div>
+    <table class="standings-table" id="standings"></table>
+  </div>
+</div>
+
+<!-- ══════════ NEWS PAGE ══════════ -->
+<div class="page" id="page-news">
+  <div class="hero">
+    <div class="hero-tag" style="background:#1e1b4b;color:#a78bfa">📰 So'nggi yangiliklar</div>
+    <h1>Dunyo <em style="color:#a78bfa">yangiliklari</em></h1>
+    <p>Texnologiya, sport, siyosat, iqtisodiyot va ko'proq.</p>
+    <div class="hero-btns"><button class="btn-p" style="background:#7c3aed">Barcha yangiliklar</button><button class="btn-s">Obuna</button></div>
+  </div>
+  <div class="news-featured" id="news-featured" onclick=""></div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">Kategoriyalar</div></div>
+    <div class="pills" id="news-cats"></div>
+    <div class="grid-2" id="news-grid"></div>
+  </div>
+</div>
+
+<!-- MANGA READER -->
+<div class="reader-overlay" id="reader">
+  <div class="reader-nav">
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="back-btn" onclick="closeReader()">←</button>
+      <span class="reader-title-txt" id="r-title">Demon Slayer – Bo'lim 1</span>
+    </div>
+    <span style="font-size:12px;color:#666">Sahifa <span id="pg-c">1</span>/<span id="pg-t">18</span></span>
+  </div>
+  <div class="reader-body" id="r-body"></div>
+  <div class="reader-foot">
+    <button class="chap-btn" onclick="prevChap()">← Oldingi</button>
+    <span style="font-size:13px;color:#888" id="chap-lbl">Bo'lim 1</span>
+    <button class="chap-btn" onclick="nextChap()">Keyingi →</button>
+  </div>
+</div>
+
+<script>
+// ─── PAGE SWITCH ───
+function goPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── MANGA DATA ───
+const MF=[
+  {t:"Demon Slayer",g:"Action",ch:"207",r:"9.8",e:"⚔️",c:"#1a0a2e",a:"#7c3aed"},
+  {t:"One Piece",g:"Adventure",ch:"1100+",r:"9.9",e:"🏴‍☠️",c:"#0d1a2e",a:"#2563eb"},
+  {t:"Attack on Titan",g:"Drama",ch:"139",r:"9.7",e:"🔱",c:"#1a1208",a:"#d97706"},
+  {t:"Jujutsu Kaisen",g:"Supernatural",ch:"265",r:"9.5",e:"💜",c:"#0d1a0d",a:"#16a34a"},
+  {t:"Solo Leveling",g:"Fantasy",ch:"179",r:"9.6",e:"⬆️",c:"#001a1a",a:"#0d9488"},
+  {t:"Chainsaw Man",g:"Horror",ch:"170",r:"9.4",e:"🪚",c:"#1a0808",a:"#dc2626"},
+];
+const MG=[
+  {n:"Naruto",g:"Action",ch:"700",c:"#1a1208",e:"🍃"},{n:"Bleach",g:"Supernatural",ch:"686",c:"#0d1a2e",e:"⚡"},
+  {n:"Death Note",g:"Mystery",ch:"108",c:"#1a0a0a",e:"📓"},{n:"Dragon Ball",g:"Action",ch:"520",c:"#0d1a0d",e:"🌟"},
+  {n:"Tokyo Ghoul",g:"Horror",ch:"179",c:"#1a0808",e:"👁"},{n:"My Hero Academia",g:"Action",ch:"430",c:"#0a0a1a",e:"💪"},
+  {n:"Black Clover",g:"Fantasy",ch:"370",c:"#0d1a0d",e:"🍀"},{n:"Fairy Tail",g:"Fantasy",ch:"545",c:"#1a0d1a",e:"✨"},
+  {n:"Re:Zero",g:"Isekai",ch:"92",c:"#001a1a",e:"🔄"},{n:"Tower of God",g:"Fantasy",ch:"600+",c:"#1a1008",e:"🗼"},
+  {n:"Vinland Saga",g:"Drama",ch:"207",c:"#0a1015",e:"🪓"},{n:"Berserk",g:"Horror",ch:"364",c:"#0d0a0d",e:"🗡️"},
+];
+const GENRES=["Hammasi","Action","Romance","Fantasy","Horror","Comedy","Supernatural","Drama","Mystery","Sci-Fi","Isekai"];
+
+(function buildManga(){
+  const fc=document.getElementById('manga-featured');
+  MF.forEach(m=>{
+    const d=document.createElement('div');d.className='manga-feat';
+    d.onclick=()=>openReader(m.t,1);
+    d.innerHTML=`<div class="manga-cover-lg" style="background:${m.c}"><div style="font-size:48px">${m.e}</div><div style="font-size:9px;color:${m.a};font-weight:600;letter-spacing:1px">${m.g.toUpperCase()}</div></div><div class="mf-info"><div class="mf-badge">TOP</div><div class="mf-title">${m.t}</div><div class="mf-rating">★ ${m.r}</div><div class="mf-ch">${m.ch} bo'lim</div></div>`;
+    fc.appendChild(d);
+  });
+  let ag='Hammasi';
+  const gc=document.getElementById('manga-genres');
+  GENRES.forEach(g=>{
+    const p=document.createElement('div');p.className='pill'+(g===ag?' active':'');p.textContent=g;
+    p.onclick=()=>{ag=g;gc.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');buildMGrid(g);};
+    gc.appendChild(p);
+  });
+  buildMGrid('Hammasi');
+})();
+
+function buildMGrid(f){
+  const c=document.getElementById('manga-grid');c.innerHTML='';
+  (f==='Hammasi'?MG:MG.filter(m=>m.g===f)).forEach(m=>{
+    const d=document.createElement('div');d.className='manga-sm';d.onclick=()=>openReader(m.n,1);
+    d.innerHTML=`<div class="ms-cover" style="background:${m.c}">${m.e}</div><div class="ms-body"><div class="ms-name">${m.n}</div><div class="ms-genre">${m.g}</div><div class="ms-ch">${m.ch} bo'lim</div></div>`;
+    c.appendChild(d);
+  });
+}
+
+// ─── READER ───
+let curT='',curC=1;
+function openReader(t,c){curT=t;curC=c;renderReader();document.getElementById('reader').classList.add('open');}
+function closeReader(){document.getElementById('reader').classList.remove('open');}
+function renderReader(){
+  document.getElementById('r-title').textContent=`${curT} – Bo'lim ${curC}`;
+  document.getElementById('chap-lbl').textContent=`Bo'lim ${curC}`;
+  const n=8+Math.floor(Math.random()*6);
+  document.getElementById('pg-t').textContent=n;document.getElementById('pg-c').textContent=1;
+  const b=document.getElementById('r-body');b.innerHTML='';
+  ['#0d0d14','#0a1014','#100d10','#0d1008'].forEach((col,i)=>{
+    if(i<n){const p=document.createElement('div');p.className='r-page';p.style.cssText=`height:${300+Math.floor(Math.random()*120)}px;background:${col}`;
+    p.innerHTML=`<div style="font-size:28px">📖</div><div>${curT}</div><div style="font-size:11px;color:#333;margin-top:4px">Bo'lim ${curC} · Sahifa ${i+1}</div>`;b.appendChild(p);}
+  });
+  for(let i=4;i<=n;i++){const p=document.createElement('div');p.className='r-page';p.style.cssText=`height:${300+Math.floor(Math.random()*120)}px;background:#0d0d14`;
+  p.innerHTML=`<div style="font-size:28px">📖</div><div>${curT}</div><div style="font-size:11px;color:#333;margin-top:4px">Bo'lim ${curC} · Sahifa ${i}</div>`;b.appendChild(p);}
+  b.scrollTop=0;
+}
+function nextChap(){curC++;renderReader();}function prevChap(){if(curC>1){curC--;renderReader();}}
+
+// ─── CAR DATA ───
+const CARS_F=[
+  {n:"BMW M5",p:"$110,000",e:"🚗",c:"#1a1208",specs:["4.4L V8","600 HP","3.5s 0-100"]},
+  {n:"Mercedes G63",p:"$180,000",e:"🚙",c:"#0d1a2e",specs:["4.0L V8","577 HP","4.5s 0-100"]},
+  {n:"Porsche 911",p:"$130,000",e:"🏎️",c:"#1a0808",specs:["3.0L Flat-6","450 HP","3.4s 0-100"]},
+  {n:"Tesla Model S",p:"$89,000",e:"⚡",c:"#001a1a",specs:["Elektr","1020 HP","2.1s 0-100"]},
+  {n:"Ferrari F8",p:"$280,000",e:"🔴",c:"#1a0000",specs:["3.9L V8","710 HP","2.9s 0-100"]},
+];
+const CARS_G=[
+  {n:"Toyota Camry",p:"$28,000",e:"🚗",c:"#0d1a0d",cat:"Sedan",specs:["2.5L","203 HP","FWD"]},
+  {n:"Chevrolet Tahoe",p:"$55,000",e:"🚙",c:"#0d1520",cat:"SUV",specs:["5.3L V8","355 HP","4WD"]},
+  {n:"Honda Civic",p:"$24,000",e:"🚗",c:"#0a1014",cat:"Sedan",specs:["1.5L Turbo","158 HP","FWD"]},
+  {n:"Ford Mustang",p:"$42,000",e:"🏎️",c:"#1a0808",cat:"Sport",specs:["5.0L V8","450 HP","RWD"]},
+  {n:"Hyundai Tucson",p:"$30,000",e:"🚙",c:"#0d1a2e",cat:"SUV",specs:["2.5L","187 HP","AWD"]},
+  {n:"BMW X5",p:"$75,000",e:"🚙",c:"#1a1208",cat:"SUV",specs:["3.0L","335 HP","xDrive"]},
+  {n:"Lexus ES",p:"$45,000",e:"🚗",c:"#001a1a",cat:"Sedan",specs:["3.5L V6","302 HP","FWD"]},
+  {n:"Audi Q7",p:"$68,000",e:"🚙",c:"#0d1526",cat:"SUV",specs:["3.0L V6","335 HP","Quattro"]},
+];
+const CAR_CATS=["Hammasi","Sedan","SUV","Sport","Elektr","Lux"];
+
+(function buildCar(){
+  const fc=document.getElementById('car-featured');
+  CARS_F.forEach(m=>{
+    const d=document.createElement('div');d.className='car-card';
+    d.innerHTML=`<div class="car-img" style="background:${m.c}">${m.e}</div><div class="car-info"><div class="car-name">${m.n}</div><div class="car-price">${m.p}</div><div class="car-tags">${m.specs.map(s=>`<span class="car-tag">${s}</span>`).join('')}</div></div>`;
+    fc.appendChild(d);
+  });
+  let ac='Hammasi';
+  const cc=document.getElementById('car-cats');
+  CAR_CATS.forEach(g=>{
+    const p=document.createElement('div');p.className='pill'+(g===ac?' active':'');p.textContent=g;
+    p.onclick=()=>{ac=g;cc.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');buildCarGrid(g);};
+    cc.appendChild(p);
+  });
+  buildCarGrid('Hammasi');
+})();
+
+function buildCarGrid(f){
+  const c=document.getElementById('car-grid');c.innerHTML='';
+  (f==='Hammasi'?CARS_G:CARS_G.filter(m=>m.cat===f)).forEach(m=>{
+    const d=document.createElement('div');d.className='car-grid-card';
+    d.innerHTML=`<div class="car-g-img" style="background:${m.c}">${m.e}</div><div class="car-g-info"><div class="car-g-name">${m.n}</div><div class="car-g-price">${m.p}</div><div class="car-specs">${m.specs.map(s=>`<span>${s}</span>`).join(' · ')}</div></div>`;
+    c.appendChild(d);
+  });
+}
+
+// ─── WEATHER ───
+const WEATHERS={
+  Toshkent:{temp:32,feel:35,desc:"Quyoshli",icon:"☀️",wind:"12 km/h",humidity:"28%",pressure:"1010 hPa",visibility:"10 km",uv:"8"},
+  Samarqand:{temp:30,feel:33,desc:"Bulutli",icon:"⛅",wind:"8 km/h",humidity:"35%",pressure:"1008 hPa",visibility:"8 km",uv:"6"},
+  Buxoro:{temp:35,feel:39,desc:"Issiq",icon:"🌤",wind:"15 km/h",humidity:"20%",pressure:"1005 hPa",visibility:"12 km",uv:"9"},
+  Namangan:{temp:28,feel:30,desc:"Yomg'irli",icon:"🌧",wind:"20 km/h",humidity:"65%",pressure:"1012 hPa",visibility:"5 km",uv:"3"},
+  Andijon:{temp:27,feel:29,desc:"Momaqaldiroq",icon:"⛈",wind:"25 km/h",humidity:"70%",pressure:"1009 hPa",visibility:"4 km",uv:"2"},
+  Farg'ona:{temp:29,feel:31,desc:"Qisman bulutli",icon:"🌥",wind:"10 km/h",humidity:"45%",pressure:"1011 hPa",visibility:"9 km",uv:"5"},
+};
+const FORECAST=[
+  {d:"Bugun",i:"☀️",hi:32,lo:18},{d:"Ertaga",i:"⛅",hi:29,lo:16},{d:"Seshanba",i:"🌧",hi:24,lo:14},
+  {d:"Chorshanba",i:"⛈",hi:22,lo:13},{d:"Payshanba",i:"🌤",hi:28,lo:15},{d:"Juma",i:"☀️",hi:33,lo:19},{d:"Shanba",i:"☀️",hi:35,lo:20},
+];
+let curCity='Toshkent';
+
+function renderWeather(){
+  const w=WEATHERS[curCity]||WEATHERS.Toshkent;
+  document.getElementById('w-main').innerHTML=`
+    <div class="wh-left"><div class="wh-city">📍 ${curCity}, O'zbekiston</div><div class="wh-temp">${w.temp}°</div><div class="wh-desc">${w.desc}</div></div>
+    <div class="wh-right"><div class="wh-icon">${w.icon}</div><div class="wh-feel">His qilinishi: ${w.feel}°C</div></div>`;
+  document.getElementById('w-details').innerHTML=`
+    <div class="w-card"><div class="w-card-icon">💨</div><div class="w-card-label">Shamol</div><div class="w-card-val">${w.wind}</div></div>
+    <div class="w-card"><div class="w-card-icon">💧</div><div class="w-card-label">Namlik</div><div class="w-card-val">${w.humidity}</div></div>
+    <div class="w-card"><div class="w-card-icon">🌡️</div><div class="w-card-label">Bosim</div><div class="w-card-val">${w.pressure}</div></div>
+    <div class="w-card"><div class="w-card-icon">👁️</div><div class="w-card-label">Ko'rinish</div><div class="w-card-val">${w.visibility}</div></div>
+    <div class="w-card"><div class="w-card-icon">☀️</div><div class="w-card-label">UV indeks</div><div class="w-card-val">${w.uv}</div></div>`;
+  const fc=document.getElementById('w-forecast');fc.innerHTML='';
+  FORECAST.forEach((f,i)=>{
+    const d=document.createElement('div');d.className='fc-day'+(i===0?' today':'');
+    d.innerHTML=`<div class="fc-name">${f.d}</div><div class="fc-icon">${f.i}</div><div class="fc-hi">${f.hi}°</div><div class="fc-lo">${f.lo}°</div>`;
+    fc.appendChild(d);
+  });
+  const cg=document.getElementById('w-cities');cg.innerHTML='';
+  Object.entries(WEATHERS).filter(([k])=>k!==curCity).forEach(([city,w])=>{
+    const d=document.createElement('div');d.className='w-card';d.style.cssText='cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;border-radius:12px';
+    d.onclick=()=>{curCity=city;document.getElementById('city-input').value=city;renderWeather();};
+    d.innerHTML=`<div><div style="font-size:13px;font-weight:600;margin-bottom:2px">📍 ${city}</div><div style="font-size:11px;color:#666">${w.desc}</div></div><div style="text-align:right"><div style="font-size:22px">${w.icon}</div><div style="font-size:16px;font-weight:700">${w.temp}°</div></div>`;
+    cg.appendChild(d);
+  });
+}
+function changeCity(){
+  const v=document.getElementById('city-input').value.trim();
+  if(WEATHERS[v]){curCity=v;renderWeather();}
+  else{alert('Shahar topilmadi. Mavjud shaharlar: '+Object.keys(WEATHERS).join(', '));}
+}
+renderWeather();
+
+// ─── FOOTBALL ───
+const LEAGUES=["Hammasi","Premier League","La Liga","Serie A","Bundesliga","Champions League"];
+const MATCHES_LIVE=[
+  {l:"Premier League",h:"Manchester City",a:"Liverpool",sh:2,sa:1,min:"67'",live:true,he:"🔵",ae:"🔴"},
+  {l:"La Liga",h:"Real Madrid",a:"Barcelona",sh:1,sa:1,min:"45'",live:true,he:"⚪",ae:"🔵"},
+  {l:"Champions League",h:"PSG",a:"Bayern Munich",sh:0,sa:2,min:"78'",live:true,he:"🔵",ae:"🔴"},
+];
+const MATCHES_TODAY=[
+  {l:"Serie A",h:"Juventus",a:"AC Milan",sh:null,sa:null,time:"21:45",he:"⚫",ae:"🔴"},
+  {l:"Bundesliga",h:"Dortmund",a:"Leverkusen",sh:null,sa:null,time:"22:30",he:"🟡",ae:"🔴"},
+  {l:"Premier League",h:"Arsenal",a:"Chelsea",sh:null,sa:null,time:"20:00",he:"🔴",ae:"🔵"},
+  {l:"La Liga",h:"Atletico",a:"Sevilla",sh:null,sa:null,time:"23:00",he:"🔴",ae:"🔴"},
+];
+const STANDINGS=[
+  {pos:1,cl:true,n:"Manchester City",mp:35,w:27,d:5,l:3,pts:86},
+  {pos:2,cl:true,n:"Arsenal",mp:35,w:25,d:6,l:4,pts:81},
+  {pos:3,cl:true,n:"Liverpool",mp:35,w:23,d:7,l:5,pts:76},
+  {pos:4,cl:true,n:"Aston Villa",mp:35,w:22,d:5,l:8,pts:71},
+  {pos:5,el:true,n:"Tottenham",mp:35,w:18,d:6,l:11,pts:60},
+  {pos:6,el:true,n:"Chelsea",mp:35,w:16,d:8,l:11,pts:56},
+  {pos:7,n:"Newcastle",mp:35,w:15,d:7,l:13,pts:52},
+  {pos:8,n:"Manchester Utd",mp:35,w:13,d:6,l:16,pts:45},
+];
+
+(function buildFootball(){
+  const lp=document.getElementById('league-pills');
+  LEAGUES.forEach((g,i)=>{
+    const p=document.createElement('div');p.className='pill'+(i===0?' active':'');p.textContent=g;
+    p.onclick=()=>{lp.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');};
+    lp.appendChild(p);
+  });
+  const ml=document.getElementById('matches-live');
+  MATCHES_LIVE.forEach(m=>{
+    const d=document.createElement('div');d.className='match-card';
+    d.innerHTML=`<div class="match-league">🟢 ${m.l} — JONLI</div><div class="match-teams"><div class="match-team"><div class="match-team-flag">${m.he}</div><div class="match-team-name">${m.h}</div></div><div class="match-score"><div class="score-num">${m.sh} – ${m.sa}</div><div class="score-live">● JONLI</div><div class="score-time">${m.min}</div></div><div class="match-team"><div class="match-team-flag">${m.ae}</div><div class="match-team-name">${m.a}</div></div></div>`;
+    ml.appendChild(d);
+  });
+  const mt=document.getElementById('matches-today');
+  MATCHES_TODAY.forEach(m=>{
+    const d=document.createElement('div');d.className='match-card';
+    d.innerHTML=`<div class="match-league">${m.l}</div><div class="match-teams"><div class="match-team"><div class="match-team-flag">${m.he}</div><div class="match-team-name">${m.h}</div></div><div class="match-score"><div style="font-size:13px;color:#666">VS</div><div class="score-time">${m.time}</div></div><div class="match-team"><div class="match-team-flag">${m.ae}</div><div class="match-team-name">${m.a}</div></div></div>`;
+    mt.appendChild(d);
+  });
+  const st=document.getElementById('standings');
+  st.innerHTML=`<thead><tr><th>#</th><th>Jamoa</th><th>O'yin</th><th>G</th><th>D</th><th>Y</th><th>Ball</th></tr></thead>`;
+  const tb=document.createElement('tbody');
+  STANDINGS.forEach(s=>{
+    const tr=document.createElement('tr');
+    const cls=s.cl?'pos-cl':s.el?'pos-el':s.pos>=18?'pos-rel':'';
+    tr.innerHTML=`<td><span class="pos-badge ${cls}">${s.pos}</span></td><td style="font-weight:600">${s.n}</td><td style="color:#666">${s.mp}</td><td>${s.w}</td><td style="color:#666">${s.d}</td><td style="color:#666">${s.l}</td><td style="font-weight:700;color:#22c55e">${s.pts}</td>`;
+    tb.appendChild(tr);
+  });
+  st.appendChild(tb);
+})();
+
+// ─── NEWS ───
+const NEWS_CATS=["Hammasi","Texnologiya","Sport","Iqtisodiyot","Dunyo","O'zbekiston","Fan"];
+const NEWS=[
+  {t:"Apple iPhone 17 rasman e'lon qilindi — yangi AI funksiyalari bilan",s:"Cupertino kompaniyasi yangi avlod smartfonlarini taqdim etdi.",c:"Texnologiya",cc:"#1e1b4b",ct:"#a78bfa",e:"📱",bg:"#0d0a1a",time:"2 soat oldin"},
+  {t:"O'zbekiston jahon chempionatiga yo'llanma uchun kurashmoqda",s:"Milliy terma jamoa hal qiluvchi uchrashuvga tayyor.",c:"Sport",cc:"#052e16",ct:"#4ade80",e:"⚽",bg:"#020d08",time:"4 soat oldin"},
+  {t:"GPT-5 chiqdi — sun'iy intellektda yangi davr boshlandi",s:"OpenAI o'zining eng kuchli modeli GPT-5 ni taqdim etdi.",c:"Texnologiya",cc:"#1e1b4b",ct:"#a78bfa",e:"🤖",bg:"#0a0a1a",time:"6 soat oldin"},
+  {t:"O'zbekistonda yangi avtomagistral qurilishi boshlandi",s:"Toshkent–Samarqand yo'li modernizatsiya qilinadi.",c:"O'zbekiston",cc:"#1a0a2e",ct:"#c084fc",e:"🛣️",bg:"#0d0814",time:"8 soat oldin"},
+  {t:"Dollar kursi bugun qanday? So'mning qiymati o'zgarmoqda",s:"Valyuta bozorida yangi tendentsiyalar kuzatilmoqda.",c:"Iqtisodiyot",cc:"#422006",ct:"#f59e0b",e:"💵",bg:"#140d00",time:"10 soat oldin"},
+  {t:"Mars ekspeditsiyasi 2026-yilga rejalashtirildi",s:"SpaceX va NASA birgalikda tarixiy missiyaga tayyorlanmoqda.",c:"Fan",cc:"#1a0a2e",ct:"#c084fc",e:"🚀",bg:"#0a0814",time:"12 soat oldin"},
+  {t:"Toshkentda eng katta savdo markazi ochildi",s:"Yangi kompleks 200,000 kv.m maydonni egallaydi.",c:"O'zbekiston",cc:"#052e16",ct:"#4ade80",e:"🏢",bg:"#020d06",time:"1 kun oldin"},
+  {t:"Kripto bozori: Bitcoin $100,000 dan oshdi",s:"Raqamli aktivlar bozorida rekord natijalar qayd etildi.",c:"Iqtisodiyot",cc:"#422006",ct:"#f59e0b",e:"₿",bg:"#120900",time:"1 kun oldin"},
+];
+
+(function buildNews(){
+  const fn=document.getElementById('news-featured');
+  const m=NEWS[0];
+  fn.innerHTML=`<div class="news-feat-img" style="background:${m.bg};font-size:72px">${m.e}</div><div class="news-feat-body"><span class="news-cat" style="background:${m.cc};color:${m.ct}">${m.c}</span><div class="news-feat-title">${m.t}</div><div class="news-feat-sub">${m.s}</div><div class="news-meta">🕐 ${m.time}</div></div>`;
+  let an='Hammasi';
+  const nc=document.getElementById('news-cats');
+  NEWS_CATS.forEach(g=>{
+    const p=document.createElement('div');p.className='pill'+(g===an?' active':'');p.textContent=g;
+    p.onclick=()=>{an=g;nc.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');buildNewsGrid(g);};
+    nc.appendChild(p);
+  });
+  buildNewsGrid('Hammasi');
+})();
+
+function buildNewsGrid(f){
+  const c=document.getElementById('news-grid');c.innerHTML='';
+  (f==='Hammasi'?NEWS:NEWS.filter(n=>n.c===f)).forEach(m=>{
+    const d=document.createElement('div');d.className='news-card';
+    d.innerHTML=`<div class="news-card-img" style="background:${m.bg}">${m.e}</div><div class="news-card-body"><span class="news-card-cat" style="background:${m.cc};color:${m.ct}">${m.c}</span><div class="news-card-title">${m.t}</div><div class="news-card-meta">🕐 ${m.time}</div></div>`;
+    c.appendChild(d);
+  });
+}
+</script>
+</body>
+</html>
